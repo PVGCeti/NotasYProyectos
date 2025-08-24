@@ -1,0 +1,1 @@
+He desplegado mis pauntes de obsidian
