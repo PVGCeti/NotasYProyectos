@@ -9,6 +9,9 @@ export const sharedPageComponents: SharedLayout = {
   footer: Component.Footer({
     links: {
       GitHub: "https://github.com/PezEjecutivo",
+      Linkedin: "https://www.linkedin.com/in/pablo-valladares-gonz%C3%A1lez/",
+      Portfolio: "https://www.pablo-vg.com/es/",
+      Youtube: "https://www.youtube.com/@pezejecutivo5738",
     },
   }),
 }

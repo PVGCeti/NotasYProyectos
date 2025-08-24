@@ -76,18 +76,24 @@ Every function you can pass is optional. By default, only a `sort` function will
 // Sort order: folders first, then files. Sort folders and files alphabetically
 Component.Explorer({
   sortFn: (a, b) => {
-    if ((!a.isFolder && !b.isFolder) || (a.isFolder && b.isFolder)) {
-      return a.displayName.localeCompare(b.displayName, undefined, {
-        numeric: true,
-        sensitivity: "base",
-      })
+    // 1. Prioridad: ordenar por el campo 'order' del frontmatter
+    const orderA = a.data.frontmatter?.order ?? Infinity
+    const orderB = b.data.frontmatter?.order ?? Infinity
+
+    if (orderA !== orderB) {
+      return orderA - orderB
     }
 
-    if (!a.isFolder && b.isFolder) {
-      return 1
-    } else {
-      return -1
-    }
+    // 2. Si el campo 'order' es el mismo o no existe, aplica la lógica original
+    // Ordenar: carpetas primero, luego archivos
+    if (a.isFolder && !b.isFolder) return -1
+    if (!a.isFolder && b.isFolder) return 1
+
+    // Ordenar alfabéticamente
+    return a.displayName.localeCompare(b.displayName, undefined, {
+      numeric: true,
+      sensitivity: "base",
+    })
   },
 })
 ```
