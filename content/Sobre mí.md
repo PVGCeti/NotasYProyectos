@@ -15,4 +15,6 @@ Además, comparto mi conocimiento a través de un <b>canal didáctico en YouTube
 >[!info] Información de contacto
 >Correo: PValladaresG@proton.me </br>
 >Telefono: +34 644 50 93 03
->
+
+
+![[Currículum Vitae Pablo Valladares.pdf]]
