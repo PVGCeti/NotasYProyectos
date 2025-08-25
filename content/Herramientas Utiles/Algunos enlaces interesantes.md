@@ -7,7 +7,7 @@ Buscar fuentes: <a href="https://fontsource.org" target="_blank">fontsource</a> 
 Buscar badges (píldoras): <a href="https://flowbite.com" target="_blank" >flowbite</a> <br/>
 Buscar fondos: <a href="https://bg.ibelick.com" target="_blank">bg.ibelick.com</a> <br/>
 Buscar iconos: <a href="https://tabler.io/icons" target="_blank">tabler.io</a> / <a href="https://svgl.app" target="_blank">svgl</a> <br/>
-Gradiantes para el fondo <a href="https://cssgradient.io/" target="_blank">cssgradient</a>
+Gradiantes para el fondo <a href="https://cssgradient.io/" target="_blank">cssgradient</a> <br/>
 Para modificar imágenes: <a href="https://www.shots.so" target="_blank">shots</a> <br/>
 Optimizar imágenes: <a href="https://squoosh.app" target="_blank">squoosh</a> <br/>
 Firmas de ficheros: <a href="https://en.wikipedia.org/wiki/List_of_file_signatures" target="_blank">wikipedia/List_of_file_signatures</a> <br/>
