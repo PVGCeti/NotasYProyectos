@@ -94,3 +94,35 @@ useGSAP(() =>{
 ```
 
 
+#### gsap.fromTo()
+
+El metodo **gsap.fromTo()** es utilizado para animar un elemento desde un estado nuevo a un estado nuevo
+
+El metodo **gsap.fromTo()** es similar a los metodos antes mencionados, **gsap.to()** y **gsap.from()**, pero la diferencia reside en que este metodo anima de un estado nuevo a otro estado que tambien es nuevo, mientras los otros animaban un estado y mantenian otro identico, de esta manera ningun estado sera igual que antes de ser animado.
+
+
+Para saber más del metodo gsap.fromTo() puedes visitar la [pagina oficial](https://gsap.com/docs/v3/GSAP/gsap.fromTo()).
+
+##### Ejemplo:
+
+En este caso, el codigo sera algo distinto, ya que en vez de tener un solo objeto, tendremos dos, el primero para el from y el segundo para el to, de esta manera podremos darle las propiedades que queramos a los dos apartados, en esta caso vamos a convertir un cuadrado, en un circulo:
+
+```
+  useGSAP(() =>{
+    gsap.fromTo('.caja',{
+      x:0,
+      rotation: 0,
+      borderRadius: '0%'
+    },
+    {
+      x:250,
+      repeat: -1,
+      yoyo: true,
+      borderRadius: '100%',
+      rotation: 360,
+      duration: 2,
+      ease: "bounce.out"
+    })
+  }, [])
+```
+
