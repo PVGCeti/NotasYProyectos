@@ -28,7 +28,7 @@ El metodo **gsap.to()** es similar al metodo **gsap.from()**, pero la diferencia
 
 Para saber más del metodo gsap.to() puedes visitar la [pagina oficial](https://gsap.com/docs/v3/GSAP/gsap.to()).
 
-Ejemplo:
+##### Ejemplo:
 
 En este caso tendremos el siguiente div:
 
@@ -69,3 +69,28 @@ useGSAP(() =>{
 ```
 
 La cual podria ser una animación sencilla para un call to action en un boton.
+
+#### gsap.from()
+
+El metodo **gsap.from()** es usado para animar un elemento desde un estado nuevo a su estado actual.
+
+Como hemos mencionado previamente, es similar al metodo **gsap.to()**, pero tienen sus diferencias, en resumen, hacen lo opuesto el uno al otro.
+
+Para saber más del metodo gsap.from() puedes visitar la [pagina oficial](https://gsap.com/docs/v3/GSAP/gsap.from()).
+
+##### Ejemplo:
+
+Debido a que from() es practicamente el mismo metodo, pero la animación empieza desde el final y va al principio, para evitar tener el mismo texto 2 veces, pueden mirar la teoria, ya que es la misma, desde el apartado de [gsap.to()](#gsap.to).
+
+```
+useGSAP(() =>{
+  gsap.from('.caja', {
+    scale: 1.1,
+    duration: 1,
+    repeat: -1,
+    yoyo: true,
+  })
+}, [])
+```
+
+
