@@ -126,3 +126,66 @@ En este caso, el codigo sera algo distinto, ya que en vez de tener un solo objet
   }, [])
 ```
 
+
+#### gsap.timeline()
+
+El metodo **gsap.timeline()** es utilizado para crear multiples animaciones
+
+Aunque es similar a los metodos anteriores, su objetivo es completamente diferente, ya que este tiene el objetivo de tener un elemento con multiples animaciones diferentes.
+
+Para saber más del metodo gsap.timeline() puedes visitar la [pagina oficial](https://gsap.com/docs/v3/GSAP/gsap.timeline()).
+
+##### Ejemplo:
+
+En este caso, para poder utilizar este metodo, deberemos de crear una linea de tiempo, que basicamente es un objeto el cual mantendra las animaciones, esto lo haremos mediante una constante, la cual podremos añadirle las animaciones que queramos:
+
+```
+const timeline = gsap.timeline({ repeat:1, repeatDelay:1, yoyo:true })
+```
+
+Una vez tenemos la linea de tiempo creada, ahora podemos crear la función de useGSAP como hemos estado usando anteriormente para animar la timeline con los metodos antes mencionados:
+
+```
+  useGSAP(()=>{
+    timeline.to('#yellow-box', {
+      x:250,
+      rotation: 360,
+      borderRadius: '100%',
+      duration: 2,
+      ease: 'back.inOut'
+    })
+
+    timeline.to('#yellow-box', {
+      y: 250,
+      scale: 2,
+      rotation: 360,
+      borderRadius: '100%',
+      duration: 2,
+      ease: 'back.inOut'
+    })
+
+    timeline.to('#yellow-box', {
+      x: 500,
+      scale: 1,
+      rotation: 360,
+      borderRadius: '8px',
+      duration: 2,
+      ease: 'back.inOut'
+    })
+  },[])
+```
+
+De esta manera, tendremos un elemento con 3 animaciones, (aunque se le pueden añadir aún más animaciones), en caso de que solo quisieras usar dos animaciones, podrias usar el metodo gsap.fromTo().
+
+Algo positivo de utilizar una timeline, es que podemos usar un boton para parar o poner en marcha la timeline cuando queramos con el siguiente codigo:
+
+```
+<button onClick={() => {
+  if(timeline.paused()) {
+    timeline.play()
+  } else{
+    timeline.pause()
+  }
+}}>Play/Pause</button>
+```
+
