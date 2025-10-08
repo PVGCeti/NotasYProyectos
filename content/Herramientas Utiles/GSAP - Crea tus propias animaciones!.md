@@ -189,3 +189,81 @@ Algo positivo de utilizar una timeline, es que podemos usar un boton para parar 
 }}>Play/Pause</button>
 ```
 
+
+#### gsap stagger
+
+GSAP stagger es una propiedad que te permite aplicar animaciones con un retraso escalonado a un grupo de elementos.
+
+Al utilizar la propiedad stagger en GSAP, puedes especificar la cantidad de tiempo para escalonar las animaciones entre cada elemento, así como personalizar la suavidad y la duración de cada animación individual. Esto te permite crear efectos dinámicos y visualmente atractivos, como desvanecimientos escalonados, rotaciones, movimientos y más.
+
+Para saber más de la propiedad stagger puedes visitar la [pagina oficial](https://gsap.com/resources/getting-started/Staggers/).
+
+##### Ejemplo:
+
+Para utilizar stagger, necesitaremos estar aplicando gsap a más de un elemento a la vez, en caso de querer aplicar propiedades adicionales, declareremos stagger, como una propiedad objeto
+
+-- Completar --
+
+#### GsapScrollTrigger
+
+El Gsap Scroll Trigger es un complemento que te permite crear animaciones que se activan por la posición de desplazamiento de la página.
+
+Con ScrollTrigger, puedes definir diversas acciones que se activarán en puntos de desplazamiento específicos, como iniciar o finalizar una animación, avanzar a través de animaciones mientras el usuario se desplaza, fijar elementos en la pantalla y más.
+
+##### Ejemplo:
+
+Para utilizar el ScrollTrigger, deberemos de importarlo, ya que esto es un plugin, por lo que tendremos que añadir la siguiente linea de codigo a nuestro proyecto:
+
+```
+import { ScrollTrigger } from "gsap/all";
+```
+
+Despues de haberlo importado, hay que registrarlo mediante el uso de gsap.registerPlugin()
+
+```
+gsap.registerPlugin(ScrollTrigger)
+```
+
+Con el plugin ya importado y registrado, deberemos de crear una referencia, esto lo haremos mediante la propia función de React, useRef(), (Es importante recordar, que deberemos de importar el useRef() de React para poder usarlo). Para esto, ademas de crear la constante, deberemos añadirle dicha propiedad al div que queramos:
+
+```
+const scrollRef = useRef()
+
+<div className="mt-20 w-full h-screen" ref={scrollRef}>
+```
+
+scrub hace que vaya despacito
+
+```
+  useGSAP(() =>{
+    const boxes = gsap.utils.toArray(scrollRef.current.children);
+
+    boxes.forEach((box) => {
+      gsap.to(box, {
+        x: 150,
+        rotation: 360,
+        borderRadius: '100%',
+        scale: 1.5,
+        scrollTrigger: {
+          trigger: box,
+          start: 'bottom bottom',
+          end: 'top 20%',
+          scrub: true,
+        },
+        ease: 'power1.inOut'
+      })
+    })
+  }, { scope: scrollRef })
+```
+
+
+####  Gsap text
+Podemos usar el mismo método que gsap.to(), gsap.from(), gsap.fromTo() y gsap.timeline() para animar texto.
+
+Usando estos métodos, podemos lograr varias animaciones y efectos de texto, como desvanecerse, aparecer, deslizarse hacia adentro, deslizarse hacia afuera, y muchos más.
+
+Para animaciones y efectos de texto más avanzados, puedes explorar el GSAP TextPlugin u otras bibliotecas de terceros que se especializan en animaciones de texto.
+
+
+
+
