@@ -1,6 +1,3 @@
----
-title: Biblioteca
----
 ## Introducción a los Web Components ⚛️
 
 Los **Web Components** son un conjunto de estándares web que permiten crear elementos HTML personalizados, reutilizables y encapsulados. A diferencia de las librerías o _frameworks_ como React, que ofrecen soluciones similares, los Web Components son una **funcionalidad nativa** del navegador.
@@ -139,4 +136,111 @@ class SimpleHeader extends HTMLElement {
 }
 
 customElements.define('simple-header', SimpleHeader);
+```
+
+Una vez hemos creado la burbuja, deberemos de añadir el shadowRoot antes del innerHTML
+
+```
+render(){
+	this.shadowRoot.innerHTML = `
+		<img src="" alt="" class="avatar" />
+	`	
+}
+```
+
+De esta manera podemos añadir los estilos sin problemas y sin que haya conflictos
+
+```
+render(){
+	this.shadowRoot.innerHTML = `
+	<style>
+		img {
+		border: 10px solid red;
+		}
+	</style>
+		<img src="" alt="" class="avatar" />
+	`	
+}
+```
+
+Al renderizar el elemento, podemos recuperar los atributos
+
+```
+const service = this.getAttribute('service') ?? 'github'
+const username = this.getAttribute('username') ?? 'PezEjecutivo'
+const size = this.getAttribute('size') ?? '32'
+```
+
+Ahora crearemos un metodo por encima del render() para recuperar el icono correctamente
+
+```
+createUrl(service, username){
+	return `https://unavatar.io/${service}/${username}`
+}
+```
+
+Una vez tenemos esto solamente tenmos que llamar a la función y poner los valores correctos en el render:
+
+```
+render(){
+
+	const service = this.getAttribute('service') ?? 'github'
+	const username = this.getAttribute('username') ?? 'PezEjecutivo'
+	const size = this.getAttribute('size') ?? '32'
+	
+	const url = this.createUrl(service, username)
+
+	this.shadowRoot.innerHTML = `
+	<style>
+		img {
+			width: ${size}px;
+			height: ${size}px;
+			border-radius: 9999px;
+		}
+	</style>
+		<img src={url} alt="" class="avatar" />
+	`	
+}
+```
+
+Quedando un componente final de esta manera:
+
+```
+class DevJobsAvatar extends HTMLElement {
+	constructor(){
+		super()
+		
+		this.attachShadow({mode: 'open'})
+	}
+}
+
+createUrl(service, username){
+	return `https://unavatar.io/${service}/${username}`
+}
+
+render(){
+
+	const service = this.getAttribute('service') ?? 'github'
+	const username = this.getAttribute('username') ?? 'PezEjecutivo'
+	const size = this.getAttribute('size') ?? '32'
+	
+	const url = this.createUrl(service, username)
+
+	this.shadowRoot.innerHTML = `
+	<style>
+		img {
+			width: ${size}px;
+			height: ${size}px;
+			border-radius: 9999px;
+		}
+	</style>
+		<img src={url} alt="" class="avatar" />
+	`	
+}
+
+connectedCallback(){
+	this.render()
+}
+
+customElements.define('devjobs-avatar', DevJobsAvatar)
 ```
