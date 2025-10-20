@@ -1,3 +1,8 @@
+---
+draft: "true"
+---
+
+
 ## Introducción a los Web Components ⚛️
 
 Los **Web Components** son un conjunto de estándares web que permiten crear elementos HTML personalizados, reutilizables y encapsulados. A diferencia de las librerías o _frameworks_ como React, que ofrecen soluciones similares, los Web Components son una **funcionalidad nativa** del navegador.

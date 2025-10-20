@@ -104,7 +104,7 @@ connectedCallback(){
 
 ## Componente Final 🧑‍💻
 
-El código final del componente `DevJobsAvatar` combinando todos los pasos anteriores:
+El código final del componente `SimpleHeader` combinando todos los pasos anteriores:
 
 Para evitar que los estilos se rompan, deberemos de encapsular el componente, para ello, en el constructor deberos de activar el modo shadow DOM
 
