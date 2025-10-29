@@ -19,4 +19,6 @@ Una vez hecho esto, si habeis escogido la misma pestaña que yo, os saldra la si
 
 ![[Connect to cluster0 3.png]]
 
-Una vez has hecho esto, ya tienes la base de datos lista para funcionar.
+Una vez has hecho esto, ya tienes la base de datos lista para funcionar. En caso de que quieras saber algunos comandos basicos de MongoDB, puedes verlo en el apartado de [[Comandos basicos]].
+
+
