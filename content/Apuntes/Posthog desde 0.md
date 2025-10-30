@@ -48,3 +48,4 @@ Una vez tenemos esto, lo cual es una pequeña muestra de como crear alertas y un
 Una vez hecho eso, en la misma pestaña, podremos ir viendo los errores a medida que sucedan:
 
 ![[Posthog error page.png]]
+
