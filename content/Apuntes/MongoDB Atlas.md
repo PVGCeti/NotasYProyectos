@@ -21,4 +21,6 @@ Una vez hecho esto, si habeis escogido la misma pestaña que yo, os saldra la si
 
 Una vez has hecho esto, ya tienes la base de datos lista para funcionar. En caso de que quieras saber algunos comandos basicos de MongoDB, puedes verlo en el apartado de [[Comandos basicos]].
 
+Es importante tener en cuenta, que aunque lo tengas descargado, si estas usando una VPN, lo más probable es que te de un error de conexión a la base de datos, por lo que si vas a utilizar una API en localhost, deberias desactivar tu VPN para evitar este tipo de errores.
 
+Por si quieres sabera que se debe este error en concreto, es que alguna VPN tienen bloqueados los puertos a los que te conectas a bases de datos y similares, esto es debido a que los nodos de las VPNs, por norma general, no soy de un unico accesorio, es decir, la IP que te proporciona la VPN, probablemente haya sido usada antes o se le dara a alguien despues, por lo que si permiten el acceso a este tipo de cosas, una persona random que se conectara a ese mismo nodo, tendria acceso a tu base de datos, en la cual puedes tener información confidencial tuya o de tus clientes, en resumen, por seguridad las VPNs bloquean el acceso a esos puertos, simplemente desactivala y todo deberia funcionar.
