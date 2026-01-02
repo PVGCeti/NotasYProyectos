@@ -1,7 +1,3 @@
----
-draft: "true"
----
-
 
 ## Introducción a los Web Components ⚛️
 
@@ -69,7 +65,7 @@ customElements.define('simple-header', SimpleHeader)
 
 El contenido (HTML y estilos) del componente se define en un método, habitualmente llamado `render()`.
 
-En este ejemplo, se utiliza el método `getAttribute()` para recuperar los **atributos** que se le pasen a la etiqueta HTML (ej: `<devjobs-avatar username="PezEjecutivo">`). Se establecen valores por defecto (`??`) si los atributos no están presentes.
+Debemos de pensar que estamos introduciendo el contenido como si fuera un archivo **.html**, por lo que podremos utilizar la etiqueta `<style>` para añadir los estilos en caso de que no querramos añadir estilos en linea.
 
 ```javascript
 render() {
@@ -94,7 +90,16 @@ render() {
 > [!important] **Nota**: 
 > Al usar **Shadow DOM**, el contenido se inyecta en `this.shadowRoot.innerHTML` en lugar de `this.innerHTML` para mantener el encapsulamiento de estilos y estructura.
 
-### 5. Ciclo de Vida: Conexión con el DOM 🔄
+### 5. Como utilizar atributos
+
+Algo muy habitual a la hora de crear paginas/componentes es que estos puedan recibir atributos y modificar el contenido en función de ellos, haciendo que sea más versatil y especifico. Para añadir atributos simplemente debremos de crear una variable utilizando **this.getAttribute()**.
+
+```javascript
+const theme = this.getAttribute('theme') ?? 'dark'
+```
+
+Esta variable deberemos de situarla dentro del **Render()** pero encima del **this.shadowRoot.innerHTML**.. Tendremos que usar el operador ternario **??**, para que en caso de que no reciba ningún valor de dicho atributo utilice el que le hemos puesto
+### 6. Ciclo de Vida: Conexión con el DOM 🔄
 
 Para que el componente se muestre en la página, el método `render()` debe ser invocado cuando el elemento es **insertado en el DOM**. Esto se logra usando el _callback_ del ciclo de vida `connectedCallback()`.
 
@@ -106,9 +111,16 @@ connectedCallback(){
 
 ## Componente Final 🧑‍💻
 
-El código final del componente `DevJobsAvatar` combinando todos los pasos anteriores:
+El código final del componente `SimpleHeader` combinando todos los pasos anteriores:
 
-Para evitar que los estilos se rompan, deberemos de encapsular el componente, para ello, en el constructor deberos de activar el modo shadow DOM
+A la hora de importar el componente simplemente deberemos de tenerlo en el archivo de JavaScript, importar dicho archivo y usar el nombre que le hemos puesto entre comillas en el **customElements.define()**, como si fuera una etiqueta normal y corriente:
+
+```html
+<body>
+    <simple-header></simple-header>
+    <script src="script.js"></script>
+</body>
+```
 
 ```javascript
 class SimpleHeader extends HTMLElement {
@@ -129,7 +141,6 @@ class SimpleHeader extends HTMLElement {
                 </div>
                 <div style="display: flex; align-items: center;">
                     <img src="" alt="Perfil">
-                    <!-- <img src="" alt="Settings"> -->
                 </div>
             </nav>
         `;
@@ -141,111 +152,4 @@ class SimpleHeader extends HTMLElement {
 }
 
 customElements.define('simple-header', SimpleHeader);
-```
-
-Una vez hemos creado la burbuja, deberemos de añadir el shadowRoot antes del innerHTML
-
-```
-render(){
-	this.shadowRoot.innerHTML = `
-		<img src="" alt="" class="avatar" />
-	`	
-}
-```
-
-De esta manera podemos añadir los estilos sin problemas y sin que haya conflictos
-
-```
-render(){
-	this.shadowRoot.innerHTML = `
-	<style>
-		img {
-		border: 10px solid red;
-		}
-	</style>
-		<img src="" alt="" class="avatar" />
-	`	
-}
-```
-
-Al renderizar el elemento, podemos recuperar los atributos
-
-```
-const service = this.getAttribute('service') ?? 'github'
-const username = this.getAttribute('username') ?? 'PezEjecutivo'
-const size = this.getAttribute('size') ?? '32'
-```
-
-Ahora crearemos un metodo por encima del render() para recuperar el icono correctamente
-
-```
-createUrl(service, username){
-	return `https://unavatar.io/${service}/${username}`
-}
-```
-
-Una vez tenemos esto solamente tenmos que llamar a la función y poner los valores correctos en el render:
-
-```
-render(){
-
-	const service = this.getAttribute('service') ?? 'github'
-	const username = this.getAttribute('username') ?? 'PezEjecutivo'
-	const size = this.getAttribute('size') ?? '32'
-	
-	const url = this.createUrl(service, username)
-
-	this.shadowRoot.innerHTML = `
-	<style>
-		img {
-			width: ${size}px;
-			height: ${size}px;
-			border-radius: 9999px;
-		}
-	</style>
-		<img src={url} alt="" class="avatar" />
-	`	
-}
-```
-
-Quedando un componente final de esta manera:
-
-```
-class DevJobsAvatar extends HTMLElement {
-	constructor(){
-		super()
-		
-		this.attachShadow({mode: 'open'})
-	}
-}
-
-createUrl(service, username){
-	return `https://unavatar.io/${service}/${username}`
-}
-
-render(){
-
-	const service = this.getAttribute('service') ?? 'github'
-	const username = this.getAttribute('username') ?? 'PezEjecutivo'
-	const size = this.getAttribute('size') ?? '32'
-	
-	const url = this.createUrl(service, username)
-
-	this.shadowRoot.innerHTML = `
-	<style>
-		img {
-			width: ${size}px;
-			height: ${size}px;
-			border-radius: 9999px;
-		}
-	</style>
-		<img src={url} alt="" class="avatar" />
-	`	
-}
-
-connectedCallback(){
-	this.render()
-}
-
-customElements.define('devjobs-avatar', DevJobsAvatar)
 ```
