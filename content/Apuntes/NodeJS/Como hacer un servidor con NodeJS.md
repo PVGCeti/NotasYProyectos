@@ -1,6 +1,8 @@
 ---
-tit: Servidor con NodeJS
+tit: Como hacer un servidor con Node JS
 ---
+#nodejs
+
 ## Primeros pasos
 
 Lo primero que debemos de saber a la hora de crear un servidor con NodeJS, es que existe un modulo nativo para hacer esto, el cual es **node:http**, con la función **createServer**, es importante que lo primero que hagamos a la hora de crear nuestro servidor sea asignarle un puerto.

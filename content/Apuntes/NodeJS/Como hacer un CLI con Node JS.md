@@ -1,9 +1,9 @@
 ---
-title: CLI con NodeJS
+title: Como hacer un CLI con Node JS
 ---
-## Como hacer un CLI en NodeJS
+#nodejs
 
-Lo primero de todo, es que si no sabes lo que es un CLI, puedes diriguirte al apartado de [[Conocimientos  basicos]] y podras encontrar más información sobre ellos.
+Lo primero de todo, es que si no sabes lo que es un CLI, puedes diriguirte al apartado de [[Conocimientos basicos]] y podras encontrar más información sobre ellos.
 
 En este caso, haremos uno muy simple que es una copia de **ls**, es decir, crearemos un cli que liste los archivos de un directorio.
 
