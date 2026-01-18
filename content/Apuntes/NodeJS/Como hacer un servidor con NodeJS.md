@@ -90,7 +90,7 @@ const server = createServer((req, res) => {
 Es importante que al final del todo, pongamos la pagina por defecto que sea algo similar a "no encontrada" y darle el codigo de estado 404, ya que es el codigo comunmente utilizado cuando no se ha podido encontrar algo.
 
 >[!warning] Error al cargar las rutas despues de la primera
->Es posible que tengas un error y que la primera ruta funcione correctamente, pero cuando vayas a otra de error, esto probablemente es debido a que estes utilizando res.end sin ponerle un return delante. Al intentar escribir al haber acabado ya la respuesta, dara error.
+>Es posible que tengas un error y que la primera ruta funcione correctamente, pero cuando vayas a otra ocurra un error. Para saber como solucionarlo vaya al apartado de [[Error al cargar rutas despues de la primera]] 
 
 
 ### Ruta de HealthCheck
