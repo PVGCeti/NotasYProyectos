@@ -34,25 +34,25 @@ Esto nos creara una carpeta llamado `node_modules`, donde estaran todas y cada u
 
 Como el servidor va a ser la raiz del proyecto, lo **tenemos** que crear en el `index.js`, aunque tendra muchas similitudes a [[Como hacer un servidor con NodeJS]] tambien tendra diferencias, la principal sera que deberemos de importar express con la siguiente linea de codigo:
 
-```node
+```javascript
 import express from "express"
 ```
 
 Al ser un servidor deberemos de asignarle un puerto, aunque podriamos crear la variable con el valor directamente como en la guia de [[Como hacer un servidor con NodeJS]], esta vez lo haremos de una forma más correcta, que es utilizando las variables de entorno, para ello deberemos de crear un archivo llamado `.env`, donde guardaremos las variables y las obtendremos mediante  `process.env.VARIABLE`, que en este caso sera el puerto. Como puede haber errores y que no encuentre el archivo (no es lo común pero es una buena practica por si hay un error) deberemos de poner `??` (nullish coalescing operator) y 3000, ya que es puerto por defecto de Express.
 
-```node
+```javascript
 const PORT = process.env.PORT ?? 3000
 ```
 
 Una vez tenemos estos preparativos, crearemos nuestro servidor, para ello utilizaremos la función de **express**,  `express()`, ya que esto sera el core del servidor, lo guardaremos en una constante llamade `app`.
 
-```node
+```javascript
 const app = express()
 ```
 
 Con esto ya tenemos nuestro servidor creado, pero ahora mismo esta vacio, por lo que no podemos comprobarlo, para ello crearemos una ruta `get` que nos devuelva un simple `Hello World`.
 
-```node
+```javascript
 app.get("/", (request, response) => {
     return response.send("hello World!");
 });
@@ -61,7 +61,7 @@ app.get("/", (request, response) => {
 Aunque tenemos el servidor creado y una ruta para comprobar su funcionamiento, aún no esta desplegado, asi que para ellos haremos que escuche en el puerto que hemos asignado anteriormente y ejecutaremos el archivo `index.js` con node.
 
 _Codigo completo hasta el momento_
-```node
+```javascript
 import express from "express";
 
 const PORT = process.env.PORT ?? 3000;
@@ -90,7 +90,7 @@ Lo primero de todo, es que si no sabes lo que es un healt check, puedes diriguir
 
 Lo más importante que debemos saber, es que es una ruta de `get`, ya que solamente queremos obtener información, ni modificarla, ni borrarla, ni añadirla, por lo que utilizaremos el metodo get y le pondremos como ruta `/health` y haremos que las respuesta sea un **json**, con el estado de ok y el tiempo que lleva el servidor desplegado (esto es util para comprobar si ha tenido caidas o si se ha reiniciado).
 
-```node
+```javascript
 app.get("/health", (req, res) => {
     return res.json({
         status: "ok",
@@ -111,7 +111,7 @@ Es importante saber que para crear un middleware en **express**, tenemos que uti
 - Response -> La respuesta del servidor
 - next -> Para pasar a la ruta 
 
-```node
+```javascript
 app.use((req, res, next) => {
     next()
 })
@@ -122,7 +122,7 @@ app.use((req, res, next) => {
 
 Una utilidad muy simple que podemos hacer para observar el funcionamiento correcto y el flujo de nuestro servidor, es añadirle un poco de codigo a dicho **middleware** para que nos muestre la hora a la que se intento acceder a una ruta (mostrando tambien a que ruta estaban intentado acceder).
 
-```node
+```javascript
 app.use((req, res, next) => {
     const timeString = new Date().toLocaleTimeString();
     console.log(`[${timeString}] ${req.method} ${req.url}`);
@@ -136,7 +136,7 @@ app.use((req, res, next) => {
 
 En caso de que tuvieramos una ruta especifica que quisieras que tenga un middleware adicional para mayor seguridad u otros motivos, simplemente deberemos de crearlo aparte como una función flecha normal y corriente.
 
-```node
+```javascript
 const middlewareEspecifico = (req, res, next) => {
     console.log("Middleware especifico de /health")
     next()
@@ -145,7 +145,7 @@ const middlewareEspecifico = (req, res, next) => {
 
 y deberemos de añadirselo a la ruta en especifico que queremos que lo tenga entre el nombre de la ruta y la función flecha
 
-```node
+```javascript
 app.get("/health", middlewareEspecifico, (req, res) => {
     return res.json({
         status: "ok",
@@ -175,7 +175,7 @@ Por normal general una API Rest, tendra diferentes rutas principales, las cuales
 
 Por lo que primero vamos a crear la ruta `GET`, para comprobar que nuestra API muestra los datos, ya que si no sera bastante complicado comprobar el funcionamiento de los otros metodos. Para hacer esto solamente deberemos de hacer lo mismo que con `/` o `/health` pero añadiendo el contenido que queremos mostras, en mi caso, hare una API Rest de comida como ejemplo.
 
-```node
+```javascript
 app.get("/get-foods", (req, res) => {
     return res.json({
         comps: [
@@ -189,7 +189,7 @@ app.get("/get-foods", (req, res) => {
 
 Aunque esto funciona, en caso de que quisieramos tener un unico resultado, ya sea porque hay muchos datos y se nos hace dificil encontrar el que queremos cuando mostramos todos o por algún motivo en especifico, simplemente deberemos de poner en la ruta `/:id` y obtenerlo desde  el parametro `req` con `.params`.
 
-```node
+```javascript
 app.get("/get-food/:id", (req, res) => {
     const { id } = req.params;
     
@@ -201,7 +201,7 @@ app.get("/get-food/:id", (req, res) => {
 
 Es importante saber que cuando recuperas el parametro, lo estas recuperando como una cadena de texto, por lo que si es un numero (como en este caso), deberas de convertilo a numero con la función `Number()` o lo que corresponda según tu caso. Esto es necesario ya que si no, no podremos aplicar las validaciones de manera correcta.
 
-```node
+```javascript
 app.get("/get-food/:id", (req, res) => {
     const { id } = req.params;
     const idNumber = Number(id);
@@ -227,13 +227,13 @@ Este metodo funciona correctamente pero actualmente los datos de nuestra API Res
 
 Es importante saber que en este contexto tenemos dos metodos correctos para hacerlo, el primero seria utilizando el `readFile` de los modulos nativos de Node JS:
 
-```node
+```javascript
 const foods = JSON.parse(readFileSync("./datos.json", "utf-8"))
 ```
 
 Aunque esto es correcto y es un metodo que podrias utilizar, necesitas importar el `readFileSync`, que no es negativo pero puedes hacerlo sin necesidad de importar ninguna dependencia y es importando el json directamente, para ello simplemente deberemos de hacer el import
 
-```node
+```javascript
 import foods from "./datos.json" with { type: "json"}
 ```
 
@@ -244,7 +244,7 @@ En este caso podriamos importar el archivo al inicio y no habria ningún tipo de
 
 Si quisieramos realizar esto, solamente deberiamos de convertir la ruta que requiere del contenido y volverla `async`, ya que tendra que esperar a que cargue el contenido y simplemente importalo dentro de dicha función.
 
-```node
+```javascript
 app.get("/get-foods", async (req, res) => {
     const { default: foods } = await import("./datos.json", { with: { type: "json" } });
     return res.json(foods);
@@ -262,7 +262,7 @@ Una vez sabemos que son los `query` y los `params`, para crear los filtros utili
 
 Lo primero que deberemos de hacer es un condicional para comprobar si dicha `query` existe, una vez tenemos los datos que necesitamos, utilizando la función de filter de JS, haremos el filtro y devolveremos lo que nos de como resultado, es importante hacer el filtro incase sensitive para mejorarle la experiencia al usuario, por lo que pasaremos todos los datos a **lowerCase**.
 
-```node
+```javascript
 app.get("/get-foods", (req, res) => {
     const { type, limit, offset } = req.query;
     let filteredFoods = foods;
@@ -285,13 +285,13 @@ app.get("/get-foods", (req, res) => {
 
 Siempre que vayamos a mostrar contenido es importante hacerlo con una paginación, de esta manera evitamos saturar al usuario y genera una sensación de orden que beneficia a la experiencia del usuario, debido a esto es importante tener valores por defecto para la paginación, podriamos ponerlo directamente en nuestra función de `get` de la siguiente manera:
 
-```node
+```javascript
 const { type, limit = 10, offset = 0 } = req.query;
 ```
 
 Pero esto no es lo más optimo, ya que puede ser que utilicemos estos datos en otra función y puede ser que no nos acordemos o sean datos que ha puesto otro desarrollador, por lo que para evitar el tener que ir buscando de un lado a otro en el codigo, deberemos de crear un archivo, tipicamente con el nombre de `config.js` o `const.js`, donde crearemos una constante que tenga los valores por defecto:
 
-```node
+```javascript
 export const DEFAULTS = {
     LIMIT_PAGINATION: 10,
     LIMIT_OFFSET: 0
@@ -300,13 +300,13 @@ export const DEFAULTS = {
 
 Por lo que a la hora de poner nuestros valores por defecto, se hara de la siguiente manera (importante tener en cuenta que debemos de importar el archivo):
 
-```node
+```javascript
 const { type, limit = DEFAULTS.LIMIT_PAGINATION, offset = DEFAULTS.LIMIT_OFFSET } = req.query;
 ```
 
 Con los valores por defectos establecidos, solo nos faltaria crear el pagina, el paginado se puede hacer de una manera sencilla utilizando la función `slice()`, por lo que simplemente haciendo uso de esta función en el resultado de los filtros junto a los numeros de la paginación obtendremos los datos paginado de manera sencilla. (Importante tener en cuenta que debemos de convertirlos en numeros ya que el `query` viene en string por defecto)
 
-```node
+```javascript
     const limitNumber = Number(limit)
     const offsetNumber = Number(offset)
 
@@ -322,7 +322,7 @@ Es importante saber que no todas las API son API Rest, ya que API Rest es un tip
 Es decir, en vez de llamar a las rutas `get-foods`, deberiamos de llamarla simplemente `foods` y que el resultado que nos de el servidor dependa de el metodo que usemos a dicha ruta, de esta manera simplificamos mucho las rutas. Por lo que si quisieramos eliminar, actualizar, añadir o ver `foods`, lo haremos desde `/foods` (en caso de que necesite la id del elemento usara `/foods/:id`)
 
 _Codigo completo hasta el momento_
-```node
+```javascript
 import express from "express";
 import foods from "./datos.json" with { type: "json"};
 import { DEFAULTS } from "./config.js";

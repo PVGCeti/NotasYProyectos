@@ -15,7 +15,7 @@ console.log(process.argv)
 
 Es importante tener en cuenta, que los dos primeros valores que estan en dicha variable, son el binario de node y el archivo del CLI, por lo que deberiamos de hacer empezar a obtener los valores desde el segundo, para poder obtener los valores/parametros que escribe el usuario.
 
-```node
+```javascript
 const args = process.argv.slice(2)
 console.log(args)
 ```
@@ -24,7 +24,7 @@ Para crear este CLI utilizaremos varias funciones de modulos nativos de NodeJS, 
 
 Lo primero que debemos de hacer es recuperar la carpeta que vamos a listar
 
-```node
+```javascript
 import { readdir, stat } from "node:fs/promises"
 import { join } from "node:path"
 
@@ -36,14 +36,14 @@ De esta manera, en caso de que el usuario no escriba ningún parametro adicciona
 
 Despues leeremos los nombres de los archivos de la carpeta
 
-```node
+```javascript
 const files = await readdir(dir)
 console.log(files)
 ```
 
 De esta manera, ya tendriamos una versión "primitiva" de nuestro ls, ya que funciona correctamente pero es muy poco estetico y no muestro casi nada de información, para remediar el problema de la información utilizaremos stat.
 
-```node
+```javascript
 const entries = await Promise.all(
     files.map(async (name) => {
         const fullPath = join(dir, name);
@@ -60,7 +60,7 @@ const entries = await Promise.all(
 
 Con la información de cada archivo/directorio obtenida, nuestro siguiente paso sera renderizarlo de la manera que a nosotros nos parezca correcta:
 
-```node
+```javascript
 for (const entry of entries) {
     const icon = entry.isDir ? '📂' : '🗃️';
     const size = entry.isDir ? '-' : `${entry.size}`;
@@ -70,7 +70,7 @@ for (const entry of entries) {
 
 Dando un archivo final:
 
-```node
+```javascript
 import { readdir, stat } from "node:fs/promises";
 import { join } from "node:path";
 

@@ -7,7 +7,7 @@ tit: Como hacer un servidor con Node JS
 
 Lo primero que debemos de saber a la hora de crear un servidor con NodeJS, es que existe un modulo nativo para hacer esto, el cual es **node:http**, con la función **createServer**, es importante que lo primero que hagamos a la hora de crear nuestro servidor sea asignarle un puerto.
 
-```node
+```javascript
 import { createServer } from "node:http"
 
 const port = 3000
@@ -23,19 +23,19 @@ Es muy importante saber, que cuando creamos un servidor, este necesita tener 2 p
 - req = Request (Petición)
 - res = Resolve (Respuesta)
 
-```node
+```javascript
 const server = createServer((req, res) => { })
 ```
 
 Una vez hemos creado el servidor, como mencione anteriormente es de extremada importancia asignarle el puerto, por lo que para ello utilizaremos la función **listen**, es importante tener en cuenta, que la función que pongamos dentro, se ejecutara siempre que iniciemos el servidor.
 
-```node
+```javascript
 server.listen(port, () => { })
 ```
 
 Con este poco contenido ya tendriamos un servidor "funcional", si utilizamos el fichero con node y vamos a nuestro localhost al puerto 3000, podremos ver que no ocurre nada, pero se queda cargando, esto es debido a que no hemos creado ninguna respuesta, pero si le añadimos una respuesta al servidor, podremos verla desde nuestro navegador.
 
-```node
+```javascript
 import { createServer } from "node:http";
 
 const port = 3000;
@@ -56,13 +56,13 @@ server.listen(port, () => {
 
 Es importante que hay información adicional que debera de saber nuestro servidor para poder transmitirsela al navegador, para ello utilizara las cabeceras, en caso de que queramos añadir una deberemos de utilizar el metodo **setHeader()**.
 
-```node
+```javascript
 res.setHeader()
 ```
 
 En caso de que quisieramos utilizar una ñ o algun emoji, podremos ver como el servidor nos pone letras raras o numeros, esto es debido a que no sabe en que lenguaje/idioma codificar dicho valor ya que no es "universal", por lo que deberemos de añadirle una cabecera especificandole como codificar dicho contenido, para ello antes de enviar la respuesta, añadiremos:
 
-```node
+```javascript
 res.setHeader('Content-Type', 'text/plain; charset=utf-8');
 ```
 
@@ -70,7 +70,7 @@ res.setHeader('Content-Type', 'text/plain; charset=utf-8');
 
 A la hora de crear nuestro servidor, probablemente querremos que cada ruta tenga algo diferente o incluso no querremos tener multiples rutas, para ello deberemos de discriminar las rutas y lo haremos con **if**, para poner las rutas que queramos:
 
-```node
+```javascript
 const server = createServer((req, res) => {
     res.setHeader('Content-Type', 'text/plain; charset=utf-8');
 
@@ -97,7 +97,7 @@ Es importante que al final del todo, pongamos la pagina por defecto que sea algo
 
 Una ruta de **HealthCheck**, es una ruta creada con un proposito simple de mostrar si el servidor/API esta funcionando de manera correcta y si quieres, de manera adiccional, el tiempo que lleva desplegado, de esta manera puedes detectar caidas inesperadas.
 
-```node
+```javascript
 if (req.url === '/health') {
     return res.end("ok " + process.uptime());
 }
@@ -111,7 +111,7 @@ Es importante que gestionemos los metodos que nos llegan de manera correcto, par
 
 De momento, en este ejemplo sencillo solamente permitiremos el metodo GET, aunque más adelante crearemos una API completa.
 
-```node
+```javascript
     const { method, url } = req;
 
     if (method !== "GET") {
