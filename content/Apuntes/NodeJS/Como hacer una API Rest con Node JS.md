@@ -171,6 +171,9 @@ Por normal general una API Rest, tendra diferentes rutas principales, las cuales
 - Patch -> Actualizar resultado parcialmente
 - Delete -> Borrar resultado
 
+>[!warning] Problema de CORS
+>Es posible que a la hora de utilizar tu API desde otra pagina/proyecto, obtengas un error de cors. Para saber como solucionarlo vaya al apartado de [[Error de CORS al utilizar mi API en Express]]
+
 #### Ruta Get
 
 Por lo que primero vamos a crear la ruta `GET`, para comprobar que nuestra API muestra los datos, ya que si no sera bastante complicado comprobar el funcionamiento de los otros metodos. Para hacer esto solamente deberemos de hacer lo mismo que con `/` o `/health` pero añadiendo el contenido que queremos mostras, en mi caso, hare una API Rest de comida como ejemplo.
@@ -381,4 +384,94 @@ app.listen(PORT, () => {
 ### Creación del CRUD
 
 Lo primero de todo, es que si no sabes lo que es un CRUD, puedes diriguirte al apartado de [[Conocimientos basicos]] y podras encontrar más información sobre ellos.
+
+#### Terminando el apartado de Read
+
+Empezaremos terminando las rutas get de la API, es decir la R del CRUD, aunque ya estan creadas, una de ellas no funciona de la manera correcta, ya que solamente nos muestra la id que hemos puesto, pero no el valor real, ya que lo hicimos para mostrar como podriamos obtener parametros para utilizarlos.
+
+Lo unico que deberemos de hacer es obtener nuestros datos, que en mi caso la variable que los tiene se llama **foods**,  y filtrar para obtener la id que esta en la url
+
+```javascript
+const food = foods.find(food => food.id === id);
+```
+
+Una vez tenemos esto, solamente deberemos de devolver el valor correspondiente y asegurarnos de devolver un mensaje de error en caso de que no se haya encontrado dicha comida y el codigo de estado 404, para ello simplemente utilizaremos un condicional y returns.
+
+```javascript
+    if (!food) {
+        return res.status(404).json({ error: "Food not found" });
+    }
+
+    return res.send(food);
+```
+
+Dandonos el siguiente codigo para la ruta de ver un elemento especifico en base a su id
+
+```javascript
+app.get("/foods/:id", (req, res) => {
+    const { id } = req.params;
+
+    const food = foods.find(food => food.id === id);
+
+    if (!food) {
+        return res.status(404).json({ error: "Food not found" });
+    }
+
+    return res.send(food);
+});
+```
+
+>[!warning] No funciona el filtro por id
+>Es posible que puedas tener un error y al realizar la busqueda por id te aparezca el mensaje de error. Para saber como solucionarlo vaya al apartado de [[No funciona el filtro por id]]
+
+![[expressGetId.png]]
+
+#### Creando el Create
+
+Para crear un CRUD es importante saber los verbos HTTP, en caso de que no lo sepas puedes diriguirte al apartado de [[Conocimientos basicos]] y podras encontrar más información sobre ellos.
+
+Para el `Create` utilizaremos el metodo `.post()`, como vamos a crear una entrada/elemento en nuestra API deberemos de obtener la información que necesitamos, en nuestro caso es solamente el nombre de la comida y el tipo. En este caso no obtendremos los valores a traves del `query`  o el `params`, lo obtendremos mediante el `body/cuerpo` de la petición.
+
+Para obtener los datos del cuerpo de la petición, solamente tendremos que usar nuestro parametro `req`, ya que este tiene todo los datos de la petición.
+
+```javascript
+const { title, type } = req.body;
+```
+
+Es importante saber que para obtener la petición de manera correcta y que funcione como queramos, necesitamos que la petición venga con el `content/type` de json, por lo que para asegurarnos de que utilizar los datos de manera correcta como tipo `JSON`, utilizaremos un middleware que trae express, para ello simplemente utilizaremos el `app.use()` y el middleware que queremos, en este caso `express.json()`.
+
+```javascript
+app.use(express.json());
+```
+
+Una vez hemos obtenido los datos del `body/cuerpo` de la petición, junto a esos datos crearemos el nuevo `elemento`, por norma general lo hariamos con una base de datos, pero en este caso como no queremos complicarlo, lo haremos desde en memoria, para ello, simplemente le hacemos una estructura json, ya que nuestros datos estan en un archivo `.json`.
+
+La id de nuestro elemento debe de ser unica, podriamos utilizar metodos para crear ids simples de manera sencilla, pero es mejor utilizar la función `crypto.randomUUID()` que trae el propio express, ya que esta pensada para eso y crea IDs complejos y seguros.
+
+```javascript
+const newFood = {
+    id: crypto.randomUUID(),
+    title,
+    type
+};
+```
+
+Una vez tenemos el cuerpo del nuevo elemento que vamos ha añadir, solamente deberemos de hacer un `.push()` del elemento (en nuestro caso) y devolver que hemos creado con existo la entrada/elemento, con el codigo de estado 201.
+
+```javascript
+foods.push(newFood); // Esto seria el codigo de nuestra base de datos
+
+return res.status(201).json(newFood);
+```
+
+De esta manera, si queremos comprobar que se crean los elementos, podriamos hacerlo mediante una app para manejos de API, como podria ser [[HTTPIE]] o hacerlo manualmente desde la terminal con un `curl`.
+
+![[expressPostFood.png]]
+
+Como podemos ver, nos devuelve el elemento/entrada que hemos creado, lo cual es necesario por convención y ademas nos ayuda a verificar que datos tiene, para asegurarnos de que lo hemos creado, simplemente deberemos hacerla una petición a la API que nos muestre todos los `elementos/entradas` o este en especifico.
+
+![[expressGetBurrito.png]]
+
+>[!note] Validación de datos
+>Es importante saber que deberiamos de verificar/sanitizar los datos para que sean consistente, ya que en este ejemplo, podemos ver que el ultimo que hemos añadido no empieza por mayusculas, esto no deberia succeder en un proyecto real.
 
