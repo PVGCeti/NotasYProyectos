@@ -1,9 +1,12 @@
 ---
 title: Como hacer una API Rest con Node JS
 ---
-#nodejs 
+#nodejs #principiante
 
 Lo primero de todo, es que si no sabes lo que es una API Rest o Express, puedes diriguirte al apartado de [[Conocimientos basicos]] y podras encontrar más información sobre ellos.
+
+>[!note] Guia para intermedios
+>Es importante saber que esta guia es una guia de nivel principante, donde explicaremos como hacer una API Rest basica, si ya sabes como hacer una API Rest basica, puedes ver como aplicar la arquitectura de MVC a dicha API Rest en [[Como aplicar MVC a una API Rest]]
 
 ## Antes de empezar
 
@@ -474,4 +477,121 @@ Como podemos ver, nos devuelve el elemento/entrada que hemos creado, lo cual es 
 
 >[!note] Validación de datos
 >Es importante saber que deberiamos de verificar/sanitizar los datos para que sean consistente, ya que en este ejemplo, podemos ver que el ultimo que hemos añadido no empieza por mayusculas, esto no deberia succeder en un proyecto real.
+
+#### Creando el Delete
+
+Para crear el delete necesitaremos utilizar los `params` para obtener la id del elemento que queremos borrar, ya que por obvias razones no vamos a eliminar la base de datos entero, deberemos de obtener la id del elemento que queremos borrar, filtrar para obtener solamente dicho elemento.
+
+```javascript
+const { id } = req.params;
+const food = foods.find(food => food.id === id);
+```
+
+Es importante que si no hemos obtenido nada, devolvamos un mensaje de error con el codigo de estado 404, esto lo haremos facilmente con un condicional.
+
+```javascript
+if (!food) {
+    return res.status(404).json({ error: "Food not found" });
+}
+```
+
+Una vez tenemos todo esto, solo necesitaremos hacer la parte de eliminarlo, que en nuestro al no utilizar una base de datos real, sino un archivo, simplemente haremos un slice, pero hay que tener en cuenta que con una base de datos de verdad, tendriamos que poner la logica correcta.
+
+```javascript
+foods.splice(food, 1);
+return res.json({ message: "Food deleted" });
+```
+
+El codigo completo del Delete seria el siguiente:
+
+```javascript
+app.delete("/foods/:id", (req, res) => {
+    const { id } = req.params;
+    const food = foods.find(food => food.id === id);
+
+    if (!food) {
+        return res.status(404).json({ error: "Food not found" });
+    }
+
+    foods.splice(food, 1);
+    return res.json({ message: "Food deleted" });
+});
+```
+
+Importante tener en cuenta, que si queremos borrar un elemento, deberemos de saber la ID de dicho elemento y ademas deberemos hacer una petición http de tipo delete, ademas en este caso no deberemos de poner nada el body a diferencia del POST.
+
+![[ExpressDelete.png]]
+
+#### Creando el Update
+
+A la hora de actualizar los elementos/entradas hay que tener en cuenta que podemos usar dos tipos de verbo http:
+
+- Put -> Actualiza completamente el elemento
+- Patch -> Actualiza parcialmente el elemento
+
+Es importante saber que el Put y el Patch comunmente se utilizan de manera incorrecta o se utiliza el Put para ambos casos en vez del Patch cuando corresponde, Aunque en este caso no enfatizaremos en eso, esta bien explicarlo rapidamente.
+
+A la hora de actualizar un recurso completamente, al igual que el delete, deberemos de saber que elemento queremos actualizar, ya que no podemos convertir todos los elementos a uno solo, ademas, al igual que el post necesitaremos obtener los datos que vamos a poner desde el body.
+
+```javascript
+const { id } = req.params;
+const updatedFood = req.body;
+```
+
+A diferencia de los metodos anterior, no utilizaremos la función `find`, sino la `findIndex`, ya que necesitamos saber el valor que vamos a cambiar, no el elemento completo, al hacer esto deberemos de cambiar el condicional, ya que puede devolvernos 0 y en ese caso, los condicionales que estabamos usando no serian correctos, por lo que tendremos que poner -1, ya que es el valor que devuelve findIndex cuando no encuentra nada.
+
+```javascript
+if (food === -1) {
+    return res.status(404).json({ error: "Food not found" });
+}
+```
+
+Ahora, una vez que tenemos el index del elemento que queremos cambiar, solamente deberemos de modificar dicho index de la variable que tiene los datos (importante recordar que esto es porque no tenemos una base de datos realista) y devolveremos el elemento actualizado
+
+```javascript
+foods[food] = { id, ...updatedFood };
+return res.json(foods[food]);
+```
+
+Dando un codigo del Put es:
+```javascript
+app.put("/foods/:id", (req, res) => {
+    const { id } = req.params;
+    const updatedFood = req.body;
+    const food = foods.findIndex(food => food.id === id);
+
+    if (food === -1) {
+        return res.status(404).json({ error: "Food not found" });
+    }
+
+    foods[food] = { id, ...updatedFood };
+    return res.json(foods[food]);
+});
+```
+
+![[ExpressPut.png]]
+
+Para hacer el patch solamente deberemos de obtener lo que queremos actualizar parcialmente, y a la hora de cambiar la variable, utilizaremos primero una copia del elemento original y luego lo que hemos obtenido del body, haciendo que solo se actualice lo que este en el body.
+
+Codigo completo del Patch:
+```javascript
+app.patch("/foods/:id", (req, res) => {
+    const { id } = req.params;
+    const { type } = req.body;
+    const food = foods.findIndex(food => food.id === id);
+
+    if (food === -1) {
+        return res.status(404).json({ error: "Food not found" });
+    }
+
+    foods[food] = { ...foods[food], "type": type };
+    return res.json(foods[food]);
+});
+```
+
+![[ExpressPatch.png]]
+
+### Fin de la API Rest
+
+Con esto ya tendriamos creado una API Rest funcional, mostrando como solucionar ciertos errores, como podria ser el de CORS o similares, como se menciono anteriormente en la guia, esto es solo para aprender a hacer una API Rest como principiante o una persona que acaba de empezar en la programación, si estas en un nivel intermedio o quieres seguir progresando puedes continuar apliando tus conocimientos y mejorando esta API en [[Como aplicar MVC a una API Rest]]
 
