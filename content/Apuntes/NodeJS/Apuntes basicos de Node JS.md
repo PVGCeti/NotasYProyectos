@@ -1,9 +1,9 @@
 ---
 title: Apuntes basicos de Node JS
+tags:
+  - nodejs
 ---
 ![[Node-js-Logo.png]]
-
-#nodejs
 
 **Node.js** es un entorno en tiempo de ejecución multiplataforma, de código abierto, para la capa del servidor (pero no limitándose a ello) basado en el lenguaje de programación [JavaScript](https://es.wikipedia.org/wiki/JavaScript "JavaScript"), asíncrono, con [E/S](https://es.wikipedia.org/wiki/I/O "I/O") de datos en una [arquitectura orientada a eventos](https://es.wikipedia.org/wiki/Programaci%C3%B3n_dirigida_por_eventos "Programación dirigida por eventos") y basado en el motor [V8](https://es.wikipedia.org/wiki/V8_\(motor_JavaScript\) "V8 (motor JavaScript)") de Google.
 

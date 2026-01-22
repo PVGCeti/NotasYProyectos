@@ -1,8 +1,9 @@
 ---
-draft: "true"
+title: Como aplicar MVC a una API Rest
+tags:
+  - nodejs
+  - intermedio
 ---
-#nodejs #intermedio
-
 En caso de no sepas que es MVC, puedes consultarlo en [[Conocimientos basicos]].
 
 >[!note] IMPORTANTE

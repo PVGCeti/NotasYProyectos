@@ -1,8 +1,9 @@
 ---
 title: Como hacer una API Rest con Node JS
+tags:
+  - nodejs
+  - principiante
 ---
-#nodejs #principiante
-
 Lo primero de todo, es que si no sabes lo que es una API Rest o Express, puedes diriguirte al apartado de [[Conocimientos basicos]] y podras encontrar más información sobre ellos.
 
 >[!note] Guia para intermedios
