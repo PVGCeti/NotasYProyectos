@@ -146,6 +146,9 @@ Una vez tenemos todos los metodos creados, podemos ver que nuestro router queda 
 
 ![[APIMVCRouterGucci.png]]
 
+>[!note] Validación de datos
+>Es importante saber que deberiamos de validar los datos que recibimos a la API (ademas de validarlos en el front, ya que se deben de validar en ambos lados). Para saber como validar los datos correctamente puedes visitar [[Como hacer validaciones utilizando Zod]]
+
 Para terminar el codigo correcto del controlador necesitaremos primero el modelo, por lo que es el momento de crearlo.
 
 ### Creando el Modelo

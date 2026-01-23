@@ -477,7 +477,7 @@ Como podemos ver, nos devuelve el elemento/entrada que hemos creado, lo cual es 
 ![[expressGetBurrito.png]]
 
 >[!note] Validación de datos
->Es importante saber que deberiamos de verificar/sanitizar los datos para que sean consistente, ya que en este ejemplo, podemos ver que el ultimo que hemos añadido no empieza por mayusculas, esto no deberia succeder en un proyecto real.
+>Es importante saber que deberiamos de verificar/sanitizar los datos para que sean consistente y correctos, evitando problemas de seguridad y mejorando la experiencia de la API. Para saber como validar datos puedes visitar [[Como hacer validaciones utilizando Zod]]
 
 #### Creando el Delete
 
