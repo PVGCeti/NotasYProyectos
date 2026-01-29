@@ -38,7 +38,7 @@ Con el bot ya creado, simplemente deberemos ir al apartado de `Bot` y obtener el
 
 Es importante que no **mostréis** ni deis vuestro **token** a nadie que no sea de confianza, ya que se pueden hacer **múltiples** cosas _maliciosas_ si una persona con malas intenciones tiene tu **token**.
 
-## ### **Punto principal**
+## Punto principal
 
 Una vez tenemos las **dependencias instaladas**, deberemos instalar `src`, donde crearemos un archivo llamado `bot.js`, que dicho archivo **será** el **archivo principal** de nuestro bot.
 
@@ -80,13 +80,13 @@ Con esto ya **podríamos** ver que el bot está como **conectado** en el servido
 
 ## Añadiendo el bot a nuestro servidor
 
-### ### **Antes de empezar**
+### Antes de empezar
 
 Deberemos tener **permisos** para añadir el bot al servidor, ya que si no, no nos saldrán para poder añadirlo y puede que nos dé **error**; por lo que, una vez nos aseguramos de que tenemos al menos un servidor con **permisos** para añadir bots, podemos proceder con este paso.
 
 (_Si no tienes ningún servidor, puedes simplemente crear un servidor de prueba y añadirlo a dicho servidor_).
 
-### ### **Verificando el bot**
+### Verificando el bot
 
 Deberemos visitar la misma **página** que visitamos para obtener el **token**; una vez ahí, iremos al apartado de `OAuth2` y copiaremos el `client id`, ya que necesitaremos dicho valor para **verificar** nuestro bot.
 
@@ -99,7 +99,7 @@ https://discord.com/api/oauth2/authorize?client_id=123456789012345678&scope=bot
 
 Una vez hecho esto, te **saldrá** para añadirlo a los servidores en los que tengas **permisos**; cuando lo hagas, podrás comprobar el **funcionamiento** de dicho `Bot`, ya que al ejecutar el archivo, el bot aparecerá como **conectado** en vez de **desconectado**.
 
-## ### **Creación de scripts para facilitar el desarrollo**
+## Creación de scripts para facilitar el desarrollo
 
 Para facilitar el **desarrollo** del bot, vamos a crear diferentes `scripts` en el archivo `package.json`; los `scripts` que crearemos **serán** el de `start` (este lo iniciará de manera correcta) y el de `dev`, para poder ver los **cambios al instante** y probar las cosas.
 
@@ -117,7 +117,7 @@ Para facilitar el **desarrollo** del bot, vamos a crear diferentes `scripts` en 
 
 De esta manera, en caso de que queramos ejecutar alguno de estos `scripts`, solamente necesitamos usar `npm run start` o `npm run dev`, dependiendo del que queramos hacer; para **probar** y **desarrollarlo** utilizaremos el `npm run dev`.
 
-## ### **Crear un prefijo al que responda el bot**
+## Crear un prefijo al que responda el bot
 
 A la hora de crear bots de `Discord`, es muy típico que estos tengan un **prefijo**, como podrían ser: `/, !, ?, -` para que, cuando lo escriban, respondan en función a ello. Aunque ese no es mi **objetivo final**, voy a explicarlo: para hacer eso deberemos usar el método `.on` y el **evento de creación de mensaje** `messageCreate` y pasarle dicho mensaje.
 
