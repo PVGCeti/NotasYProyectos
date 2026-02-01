@@ -504,6 +504,24 @@ if (!Number(id)) {
 }
 ```
 
+Esta solución parece correcta, de hecho sera correcta pero solo en el caso de que lo utilices en el ultimo elemento del JSON, para hacer que funcione correctamente, deberemos de utilizar `filter` y obtener solo los que tengan el id diferente:
+
+```javascript
+export async function deleteTask(id) {
+    const file = await readFile(`./Tasks.json`, "utf-8");
+    const jsonFile = JSON.parse(file);
+    const tasks = jsonFile.filter(task => task.id != id);
+
+    if (!Number(id)) {
+        return console.log("La ID debe ser un numero");
+    }
+
+    await writeFile("./Tasks.json", JSON.stringify(tasks));
+
+    console.log(`Task deleted successfully (ID: ${id})`);
+}
+```
+
 ### Marcar tareas como en progreso o hechas
 
 Una vez tenemos las tres funciones principales: `añadir, actualizar y borrar`, es bastante sencilla hacer las demas, ya que estas siguen bastante la estructura de algunas de ella, en este caso la de actualizar.

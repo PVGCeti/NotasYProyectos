@@ -280,8 +280,128 @@ async function createExpense(desc, amount) {
 }
 ```
 
-# WIP
+### Actualizar un gasto
 
+En este caso, al no haber ejemplos de uso, deberemos de pensarlos nosotros mismo, en mi caso, creo que seria conveniente el poder actualizar tanto la cantidad como la descripción, por si te has equivocado en la descripción o puesto una coma cuando no debes.
+
+Al hacer esto nuestra función deberia de recibir 3 parametros:
+
+- Id del gasto
+- descripción del gasto
+- cantidad del gasto
+
+Ademas de esto, deberemos de buscar en nuestra base de datos (archivo JSON), la tarea en cuestión, para hacer esto, lo podremos hacer mediante la función de `findIndex`:
+
+```javascript
+async function updateExpense(id, desc, amount) {
+    const file = await readFile("./expenses.json", "utf-8");
+    const jsonFile = JSON.parse(file);
+    const index = jsonFile.findIndex(expense => expense.id == id);
+}
+```
+
+A diferencia del `Task Tracker CLI`, no necesitamos añadir cuando se actualizo dicho gasto, por lo que solamente tendremos que cambiar la descripción y la cantidad, con el `id` obtenido, solamente deberemos de cambiarlos y sobreescribir el archivo.
+
+```javascript
+async function updateExpense(id, desc, amount) {
+    const file = await readFile("./expenses.json", "utf-8");
+    const jsonFile = JSON.parse(file);
+    const index = jsonFile.findIndex(expense => expense.id == id);
+
+    jsonFile[index].description = desc;
+    jsonFile[index].amount = amount;
+
+    await writeFile("./expenses.json", JSON.stringify(jsonFile));
+
+    console.log(`Expense updated successfully (ID: ${id})`);
+}
+```
+
+Como no estaba en el ejemplo de uso, no lo habiamos añadido como un comando del commander, por lo que deberemos de añadirlo, en este caso, al no mostrar como debemos hacerlo, utilizaremos el metodo `argument`, para mostrar su uso y funcionalidad.
+
+```javascript
+program.command('update')
+    .argument('<int>', 'ID del gasto')
+    .option('--description <string>', 'Descripción del gasto')
+    .option('--amount <int>', 'Cantidad del gasto')
+    .action((options) => {
+        console.log("Actualizar");
+    });
+```
+
+Al estar usando argument, en caso de que no lo introduzcamos nos mostrara un error por predeterminado, lo cual no es lo que queremos, ya que si hay un error, queremos que se muestre de manera más humana, por lo que en el action, ademas de tener `options`, deberemos de tener el id y comprobarlo ahi, ya que haremos que sea opcional.
+
+```javascript
+program.command('update')
+    .argument('[id]', 'ID del gasto')
+    .option('--description <string>', 'Descripción del gasto')
+    .option('--amount <int>', 'Cantidad del gasto')
+    .action((id, options) => {
+        if (!id) {
+            console.error("Debes de proporcionar el ID");
+            process.exit(1);
+        }
+        console.log("Actualizar");
+    });
+```
+
+### Borrar un gasto
+
+Esta función es muy similar a la de actualizar, pero en vez de usar `findIndex`, utilizaremos `find` para filtrar los objetos que no tengan el id que queremos, de esta manera, solamente tendremos que guardarlo y dar dicha variabla para que se sobreescriba
+
+```javascript
+async function deleteExpense(id) {
+    const file = await readFile("./expenses.json", "utf-8");
+    const jsonFile = JSON.parse(file);
+    const expense = jsonFile.filter(expense => expense.id != id);
+
+    await writeFile("./expenses.json", JSON.stringify(expense));
+
+    console.log(`Expense deleted successfully (ID: ${id})`);
+}
+```
+
+Es importante saber, que de esta manera funciona correctamente, pero no estamos haciendo ningún tipo de validación o manejo de errores, ya que primero tendremos las funcionalidades del programa y despues haremos test y la gestión de errores que sea pertinente.
+
+### Ver todos los gastos
+
+Esta función es bastante simple de hacer, ya que solamente deberemos de obtener los datos y mostrarlos de manera correcta, aunque podriamos usar dependencias externas para mostrarlos de mejor manera, prefiero mantenerlo sin más dependencias externas excepto `Commander`.
+
+Por lo que para hacer esta función solamente necesitamos leer el archivo JSON y mostrar los datos formateados de la manera correcta:
+
+```javascript
+async function listExpense() {
+    const file = await readFile("./expenses.json", "utf-8");
+    const jsonFile = JSON.parse(file);
+
+    console.log("ID  Date       Description  Amount");
+    jsonFile.forEach(expense => {
+        console.log(`${expense.id}  ${expense.date}   ${expense.description}        ${expense.amount}`);
+    });
+}
+```
+
+Aunque de esta manera nos mostraria los datos como en el ejemplo de uso, es importante saber que las columnas se van a desalinear, ya que los espacios estan puesto de manera "hard codeada", pero sin dependencias externas es muy complejo el mantener separado de forma correcta los datos.
+
+![[listexpense.png]]
+
+### Ver resumen de los gastos
+
+Esta función sigue el mismo principio que la anterior, solo que necesitaremos sumar los gastos y mostrarlos al final, esto es tan sencillo como hacer un `forEach` que sume a una variable, lo unico a tener en cuenta es que al leer los datos, los obtendremos como string, por lo que deberemos de convertirlos en un numero (int) para poder sumarlos correctamente
+
+```javascript
+async function summaryExpense() {
+    const file = await readFile("./expenses.json", "utf-8");
+    const jsonFile = JSON.parse(file);
+    let total = 0;
+
+    jsonFile.forEach(expense => {
+        total += Number(expense.amount);
+    });
+
+    console.log(`Total expenses: ${total}$`);
+}
+```
 
 
 

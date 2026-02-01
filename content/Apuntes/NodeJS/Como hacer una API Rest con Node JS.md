@@ -514,7 +514,7 @@ app.delete("/foods/:id", (req, res) => {
         return res.status(404).json({ error: "Food not found" });
     }
 
-    foods.splice(food, 1);
+    foods.slice(food, 1);
     return res.json({ message: "Food deleted" });
 });
 ```
