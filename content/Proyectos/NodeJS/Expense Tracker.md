@@ -4,7 +4,9 @@ tags:
   - nodejs
   - principiante
 ---
-## Requerimientos
+## Información del proyecto
+
+### Requisitos
 La aplicación debera funcionar desde la lina de comando y tener las siguientes caracteristicas
 
 - El usuario puede añadir un gasto con cantidad y descripcion
