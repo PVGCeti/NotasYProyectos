@@ -38,7 +38,6 @@ $ expense-tracker summary
 
 $ expense-tracker summary --month 8
 # Total expenses for August: $20
-
 ```
 
 ## Preparación del proyecto
@@ -402,6 +401,169 @@ async function summaryExpense() {
     console.log(`Total expenses: ${total}$`);
 }
 ```
+
+### Ver resumen de los gastos según el mes
+
+Esta función es la misma que la anterior pero con un filtro, por lo que solamente tendremos que modificar un poco la anterior, dandole un parametro y añadiendo un filtro
+
+```javascript
+async function summaryExpense(month) {
+    const file = await readFile("./expenses.json", "utf-8");
+    const jsonFile = JSON.parse(file);
+    let total = 0;
+
+    if (month) {
+        const filteredExpenses = jsonFile.filter(expense => expense.date.slice("/")[0] == 2);
+        filteredExpenses.forEach(expense => {
+            total += Number(expense.amount);
+        });
+
+        console.log(`Total expenses: ${total}$ in `);
+
+    } else {
+        jsonFile.forEach(expense => {
+            total += Number(expense.amount);
+        });
+        console.log(`Total expenses: ${total}$`);
+    }
+
+}
+```
+
+De esta manera lo tendriamos perfecto, el unico problema se que no tenemos el nombre del mes para mostrarlo, para hacer eso deberemos de crear una mini función de utilidad para no molestar ensuciar el codigo y funcionalidad de esta función.
+
+Para dicha función simplemente crearemos una fecha con el mes y obtendremos el nombre mediante el uso de `month: long`
+
+```javascript
+function getMonthName(number) {
+    const date = new Date(`${number}/1/2000`);
+    return date.toLocaleString("en-EN", { month: "long" });
+}
+```
+
+Con esta función hecha, simplemente deberemos de ponerla en el console.log
+
+```javascript
+async function summaryExpense(month) {
+    const file = await readFile("./expenses.json", "utf-8");
+    const jsonFile = JSON.parse(file);
+    let total = 0;
+
+    if (month) {
+        const filteredExpenses = jsonFile.filter(expense => expense.date.slice("/")[0] == month);
+
+        filteredExpenses.forEach(expense => {
+            total += Number(expense.amount);
+        });
+
+        console.log(`Total expenses: ${total}$ in ${getMonthName(month)}`);
+
+    } else {
+        jsonFile.forEach(expense => {
+            total += Number(expense.amount);
+        });
+
+        console.log(`Total expenses: ${total}$`);
+    }
+}
+```
+
+Con esto ya tendriamos todas las funciones necesarias creadas, solo toca hacerlas funcionar junto al Commander, lo cual, teniendo en cuenta que esta medio preparado no deberia ser muy complicado, solo tendremos que tener en cuenta que tengamos los datos que necesitamos y listo.
+
+## Añadiendo las funciones al Commander
+
+A la hora de añadir las funciones, en caso de que necesitemos que las opciones esten si o si, simplemente deberemos de hacer un condicional y comprobar que esten.
+
+```javascript
+program.command('add')
+    .description('Añade un gasto')
+    .option('--description <string>', 'Descripción del gasto')
+    .option('--amount <int>', 'Cantidad del gasto')
+    .action((options) => {
+        if (options.description && options.amount) {
+            createExpense(options.description, options.amount);
+        } else {
+            console.log("Debes introcudir descripción y cantidad a la hora de crear un gasto");
+        }
+    });
+```
+
+En el caso de update es lo mismo pero con el simple cambio de que aqui tenemos un argument, por lo que a la hora de usar el `action`, deberemos de añadirle el argument como parametro
+
+```javascript
+program.command('update')
+    .argument('[id]', 'ID del gasto')
+    .option('--description <string>', 'Descripción del gasto')
+    .option('--amount <int>', 'Cantidad del gasto')
+    .action((id, options) => {
+        if (!id) {
+            console.error("Debes de proporcionar el ID");
+            process.exit(1);
+        }
+
+        updateExpense(id, options.description, options.amount);
+    });
+```
+
+Es importante realizar un pequeño cambio a la función de updateExpense, ya que tal y como estaba, necesitabas poner ambas opciones para cambiarlo, pero es muy probable que solamente quieras cambiar una cosa en vez de las dos a la vez.
+
+```javascript
+export async function updateExpense(id, desc, amount) {
+    const file = await readFile("./expenses.json", "utf-8");
+    const jsonFile = JSON.parse(file);
+    const index = jsonFile.findIndex(expense => expense.id == id);
+
+    desc ? jsonFile[index].description = desc : "";
+    amount ? jsonFile[index].amount = amount : "";
+
+    await writeFile("./expenses.json", JSON.stringify(jsonFile));
+
+    console.log(`Expense updated successfully (ID: ${id})`);
+}
+```
+
+En cuanto a la lista, al no requerir de ningún parametro, solamente tendremos que poner la función y ya
+
+```javascript
+program.command('list')
+    .description('Muestra los gastos')
+    .action(() => {
+        listExpense();
+    });
+```
+
+En el caso de summary es basicamente lo mismo pero añadirle un parametro, al no ser obligatorio ni siqueira es necesario que pongamos un condicional
+
+```javascript
+program.command('summary')
+    .description('Muestra un resumen de los gastos')
+    .option('--month <int>', 'Mes del año del que quieres mostrar los gastos')
+    .action((options) => {
+        summaryExpense(options.month);
+    });
+```
+
+Con el delete, simplemente añadiremos un condicional y avisaremos en caso de que no introduzcan el id
+
+```javascript
+program.command('delete')
+    .description('Borra un gasto')
+    .option('--id <int>', 'ID de la tarea a borrar')
+    .action((options) => {
+        if (options.id) {
+            deleteExpense(options.id);
+        } else {
+            console.log("Debes introducir un ID");
+        }
+    });
+```
+
+Con esto el proyecto ya estaria funcionando, con un manejo de errores correcto y sencillo, con una estructura clara y un codigo limpio.
+
+## Repositorio del proyecto
+
+repositorio: https://github.com/PezEjecutivo/NodeJS/tree/main/Expense%20Tracker
+
 
 
 
