@@ -3,6 +3,7 @@ title: Task Tracker CLI
 tags:
   - nodejs
   - proyecto
+  - CLI
 ---
 ## Información del proyecto
 

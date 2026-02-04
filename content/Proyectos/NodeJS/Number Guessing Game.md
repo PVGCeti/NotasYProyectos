@@ -3,6 +3,7 @@ title: Number Guessing Game
 tags:
   - nodejs
   - principiante
+  - CLI
 ---
 ## Información del proyecto
 

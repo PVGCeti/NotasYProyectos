@@ -3,6 +3,8 @@ title: GitHub User Activity
 tags:
   - nodejs
   - principiante
+  - CLI
+  - API
 ---
 ## Información del proyecto
 

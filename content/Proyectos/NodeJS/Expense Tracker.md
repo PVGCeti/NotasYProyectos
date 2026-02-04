@@ -3,6 +3,7 @@ title: Expense Tracker
 tags:
   - nodejs
   - principiante
+  - CLI
 ---
 ## Información del proyecto
 
